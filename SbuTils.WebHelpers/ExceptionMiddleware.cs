@@ -32,7 +32,7 @@ public class ExceptionMiddleware<TErrorCodeEnum, TException>
         }
         catch (Exception ex)
         {
-            var statusCode = HttpStatusCode.InternalServerError;
+            var statusCode = (int)HttpStatusCode.InternalServerError;
             var functionalErrorCode = _options.UnhandledErrorEnumValue;
             var message = ex.Message ?? "Unhandled exception occured";
             var stackTrace = ex.StackTrace ?? "No stack trace available";
@@ -101,6 +101,6 @@ public class ExceptionMiddlewareOptions<TErrorCodeEnum, TException>
     where TException : class, IHaveErrorCode<TErrorCodeEnum>
 {
     public TErrorCodeEnum UnhandledErrorEnumValue { get; set; }
-    public Dictionary<TErrorCodeEnum, HttpStatusCode> EnumToStatusCodeMap { get; set; } =
-        new Dictionary<TErrorCodeEnum, HttpStatusCode>();
+    public Dictionary<TErrorCodeEnum, int> EnumToStatusCodeMap { get; set; } =
+        new Dictionary<TErrorCodeEnum, int>();
 }
