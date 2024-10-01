@@ -1,11 +1,26 @@
-﻿# SbuTils
+# SbuTils
 
-In aspnet core Program.cs, use the Exception middleware like so: 
+## Aspnet Exception handling
+1. Create an "error code enum" that will list all exception errors in your app.
+```csharp
+public enum ErrorCodeEnum
+{
+    ITEM_NOT_FOUND,
+    GROUP_ITEM_NOT_FOUND,
+    ITEM_FILE_NOT_FOUND
+    /* ... */
+}
+
+```
+
+2. Create a project "umbrella" exception e.g. `MyMainException` that inherits `Exception` and could be inherited itself if needed. This exception must implement `IHaveErrorCode` returning the enum value which can be resolved generically from this exception.
+
+3. In aspnet core Program.cs, use the Exception middleware like so: 
 
 ``` csharp
 
 app.UseExceptionMiddleware(
-    new ExceptionMiddlewareOptions<ErrorCodeEnum, VStackException>
+    new ExceptionMiddlewareOptions<ErrorCodeEnum, MyMainException>
     {
         UnhandledErrorEnumValue = ErrorCodeEnum.UNHANDLED,
         EnumToStatusCodeMap = new Dictionary<ErrorCodeEnum, HttpStatusCode>
