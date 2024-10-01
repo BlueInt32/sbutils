@@ -1,5 +1,5 @@
 # SbuTils
-
+Nuget package: https://www.nuget.org/packages/SbuTils/
 ## Aspnet Exception handling
 1. Create an "error code enum" that will list all exception errors in your app.
 ```csharp
