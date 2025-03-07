@@ -1,9 +1,11 @@
 ﻿using System.Net;
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using SbuTils.Common;
 
-namespace SbuTils.WebHelpers;
+namespace SbuTils.Web;
 
 public class ExceptionMiddleware<TErrorCodeEnum, TException>
     where TErrorCodeEnum : struct, IConvertible
@@ -63,7 +65,8 @@ public class ExceptionMiddleware<TErrorCodeEnum, TException>
                 // microsoft.json.text options for enum convertion
                 options: new System.Text.Json.JsonSerializerOptions
                 {
-                    Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() }
+                    Converters = { new System.Text.Json.Serialization.JsonStringEnumConverter() },
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 }
             );
         }
@@ -92,6 +95,28 @@ public static class ExceptionMiddlewareExtensions
         {
             throw new InvalidOperationException("Enum to HttpStatusCode map is mandatory");
         }
+        // important: check if all enum values are present in the map, otherwise throw
+        TErrorCodeEnum[] actualErrorCode = (TErrorCodeEnum[])Enum.GetValues(typeof(TErrorCodeEnum));
+        var notHandledEnumErrorCodes = actualErrorCode.Where(
+            code => !options.EnumToStatusCodeMap.ContainsKey(code)
+        );
+        if (notHandledEnumErrorCodes.Any())
+        {
+            // if the only not handled code is the configured unhandled, branch out, otherwise, throw
+            // Mysterious unable to compare TErrorCodeEnum values, had to ToString() to compare...
+            if (
+                notHandledEnumErrorCodes.Count() != 1
+                || notHandledEnumErrorCodes.First().ToString()
+                    != options.UnhandledErrorEnumValue.ToString()
+            )
+            {
+                throw new InvalidOperationException(
+                    $"All Enum's codes must have a corresponding key in the map. I know, tough right? ;). "
+                        + $"Here is the list of not handled codes: {string.Join(',', notHandledEnumErrorCodes)}"
+                );
+            }
+        }
+
         return builder.UseMiddleware<ExceptionMiddleware<TErrorCodeEnum, TException>>(options);
     }
 }

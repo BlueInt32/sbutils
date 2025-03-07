@@ -1,6 +1,10 @@
 # SbuTils
 Nuget package: https://www.nuget.org/packages/SbuTils/
-## Aspnet Exception handling
+
+## Aspnet core catch-all exceptions middleware
+
+Use this middleware in conjonction with domain exception and error codes to streamline the error handling process in a json rest API.
+
 1. Create an "error code enum" that will list all exception errors in your app.
 ```csharp
 public enum ErrorCodeEnum
@@ -28,22 +32,32 @@ app.UseExceptionMiddleware(
             // 400s
             { ErrorCodeEnum.ITEM_NOT_FOUND, 404 },
             { ErrorCodeEnum.GROUP_ITEM_NOT_FOUND, 404 },
-            { ErrorCodeEnum.TARGET_DIRECTORY_DOES_NOT_EXIST, 400 },
-            { ErrorCodeEnum.ITEM_WITH_SAME_PATH_ALREADY_EXISTS, 400 },
-            { ErrorCodeEnum.TAG_ALREADY_EXISTS, 400 },
-            { ErrorCodeEnum.NEW_RELATIVE_PATH_IS_THE_SAME, 400 },
-            { ErrorCodeEnum.UNKNOWN_FILE_EXTENSION, 400 },
-            { ErrorCodeEnum.DUPLICATE_CATALOG_PATH, 400 },
-            { ErrorCodeEnum.CATALOG_DOES_NOT_EXIST, 400 },
+            ...
 
             // 500s
             { ErrorCodeEnum.ITEM_FILE_NOT_FOUND, 500 },
-            { ErrorCodeEnum.CANNOT_MOVE_ITEM_FILE, 500 },
-            { ErrorCodeEnum.FFMPEG_PROBING_FAILURE, 500 },
-            { ErrorCodeEnum.FFMPEG_OR_IMAGEMAGICK_FAILURE, 500 },
+            ...
         }
     }
 );
+```
 
+## Result container
+
+Sometimes we don't want a process to throw, we want to give the Exception handling responsibility to the caller. 
+`Result` gives the flexibility for the service returning it to either succeed or fail without throwing. 
+
+1. If you haven't already, create an "error code enum" that will contain your app's error codes: 
+ 
+```csharp
+public enum ErrorCodeEnum
+{
+    ITEM_NOT_FOUND,
+    GROUP_ITEM_NOT_FOUND,
+    ITEM_FILE_NOT_FOUND
+    /* ... */
+}
 
 ```
+
+2. Whenever a service you create should not throw but could fail, make it return `Error<ErrorCodeEnum>` or `Error<ExpectedReturnedType, ErrorCodeEnum>` and give the "throw exception" responsibility to the caller.

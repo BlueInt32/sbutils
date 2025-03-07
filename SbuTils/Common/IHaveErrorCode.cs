@@ -1,4 +1,4 @@
-﻿namespace SbuTils.WebHelpers;
+﻿namespace SbuTils.Common;
 
 public interface IHaveErrorCode<TErrorCodeEnum>
     where TErrorCodeEnum : struct, IConvertible
