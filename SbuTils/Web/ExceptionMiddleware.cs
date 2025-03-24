@@ -40,7 +40,7 @@ public class ExceptionMiddleware<TErrorCodeEnum, TException>
             var stackTrace = ex.StackTrace ?? "No stack trace available";
             if (ex != null && ex is TException)
             {
-                functionalErrorCode = (ex as TException)!.ErrorCode;
+                functionalErrorCode = (ex as TException)!.Code;
                 _options.EnumToStatusCodeMap.TryGetValue(functionalErrorCode, out statusCode);
             }
             if (context.Response.HasStarted)

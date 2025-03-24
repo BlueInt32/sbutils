@@ -3,5 +3,5 @@
 public interface IHaveErrorCode<TErrorCodeEnum>
     where TErrorCodeEnum : struct, IConvertible
 {
-    public TErrorCodeEnum ErrorCode { get; set; }
+    public TErrorCodeEnum Code { get; set; }
 }
