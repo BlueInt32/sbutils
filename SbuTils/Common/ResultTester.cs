@@ -3,7 +3,7 @@
 namespace SbuTils.Common
 {
     [TestClass]
-    internal class ResultTester
+    public class ResultTester
     {
         enum TestErrorEnum
         {
@@ -13,7 +13,12 @@ namespace SbuTils.Common
 
         class DummyObject
         {
-            public string Name { get; set; }
+            public DummyObject(string name)
+            {
+                Name = name;
+            }
+
+            public string Name { get; init; }
         }
 
         Result<TestErrorEnum> GenerateResultNoObjectError()
@@ -33,7 +38,7 @@ namespace SbuTils.Common
 
         Result<DummyObject, TestErrorEnum> GenerateOkResultWithObject()
         {
-            return Result<DummyObject, TestErrorEnum>.Ok(new DummyObject { Name = "Bob" });
+            return Result<DummyObject, TestErrorEnum>.Ok(new DummyObject("Bob"));
         }
 
         class TestException : Exception, IConvertFromNotOkResultException<TestErrorEnum>
@@ -101,7 +106,7 @@ namespace SbuTils.Common
 
             //Assert
 
-            Assert.AreEqual("Bob", result.Name);
+            Assert.AreEqual("Bob", result?.Name);
         }
     }
 }

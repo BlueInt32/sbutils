@@ -47,14 +47,15 @@ public class Result<T, TErrorCodeEnum>
         return this;
     }
 
-    public new Result<T, TErrorCodeEnum> ThrowOnError<TException>()
+    public Result<T, TErrorCodeEnum> ThrowOnError<TException>()
         where TException : Exception, IConvertFromNotOkResultException<TErrorCodeEnum>
     {
         if (!Success)
         {
-            TException ex = (TException)
-                Activator.CreateInstance(typeof(TException), this.Error.Message);
-            ex.Code = this.Error.Code;
+            var ex = (TException)Activator.CreateInstance(typeof(TException), this.Error?.Message)!;
+            var resultError = this.Error;
+            if (resultError != null)
+                ex.Code = resultError.Code;
             throw ex;
         }
         return this;

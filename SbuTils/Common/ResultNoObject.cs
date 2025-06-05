@@ -46,9 +46,8 @@ public class Result<TErrorCodeEnum> : Result<object, TErrorCodeEnum>
     {
         if (!Success)
         {
-            TException ex = (TException)
-                Activator.CreateInstance(typeof(TException), this.Error.Message);
-            ex.Code = this.Error.Code;
+            var ex = (TException)Activator.CreateInstance(typeof(TException), this.Error!.Message)!;
+            ex.Code = Error.Code;
             throw ex;
         }
         return this;

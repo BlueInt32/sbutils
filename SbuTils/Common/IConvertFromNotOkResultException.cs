@@ -4,7 +4,6 @@
         : IHaveErrorCode<TErrorCodeEnum>
         where TErrorCodeEnum : struct, IConvertible
     {
-        TErrorCodeEnum Code { get; set; }
         string Message { get; }
     }
 }
