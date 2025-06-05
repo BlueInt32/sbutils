@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PackageId>SbuTils</PackageId>
-    <Version>0.1.1</Version>
+    <Version>0.1.4</Version>
     <Authors>Sbu</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -17,6 +17,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.8.3" />
     <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <PackageReference Include="RunProcessAsTask" Version="1.2.4" />
   </ItemGroup>
 
 </Project>
