@@ -3,3 +3,4 @@
 .vs
 *.ncrunchsolution.user
 **/*.cache
+.idea/.idea.SbuTils/.idea
