@@ -10,10 +10,14 @@ public class Result<TErrorCodeEnum> : Result<object, TErrorCodeEnum>
 
     public static new Result<TErrorCodeEnum> NotOk(
         TErrorCodeEnum errorCode,
-        string errorMessage = "",
+        string? errorMessage = null,
         object? data = null
     )
     {
+        if (string.IsNullOrWhiteSpace(errorMessage))
+        {
+            throw new ArgumentException("Error message is mandatory");
+        }
         return new Result<TErrorCodeEnum>
         {
             Error = new ResultError<TErrorCodeEnum>

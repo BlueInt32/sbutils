@@ -56,16 +56,34 @@ namespace SbuTils.Common
         }
 
         [TestMethod]
+        public void NotOk_CannotBeCreatedWithNullNorEmptyString()
+        {
+            // Arrange
+            // Act
+            var exEmpty = Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var badEmpty = Result<TestErrorEnum>.NotOk(TestErrorEnum.Nope1, "");
+            });
+            var exNull = Assert.ThrowsExactly<ArgumentException>(() =>
+            {
+                var badNull = Result<TestErrorEnum>.NotOk(TestErrorEnum.Nope1, null);
+            });
+            // Assert
+            Assert.AreEqual("Error message is mandatory", exEmpty.Message);
+            Assert.AreEqual("Error message is mandatory", exNull.Message);
+        }
+
+        [TestMethod]
         public void ThrowOnError_WorksFineOnGenericExceptionWithResultNoObject()
         {
             // Arrange
-            //Act
+            // Act
             var ex = Assert.ThrowsExactly<TestException>(() =>
             {
                 GenerateResultNoObjectError().ThrowOnError<TestException>();
             });
 
-            //Assert
+            // Assert
             Assert.AreEqual(TestErrorEnum.Nope1, ex.Code);
             Assert.AreEqual("Pas bon 1", ex.Message);
         }
@@ -74,13 +92,13 @@ namespace SbuTils.Common
         public void ThrowOnError_WorksFineOnGenericExceptionWithResultWithObject()
         {
             // Arrange
-            //Act
+            // Act
             var ex = Assert.ThrowsExactly<TestException>(() =>
             {
                 GenerateResultWithObjectError().ThrowOnError<TestException>();
             });
 
-            //Assert
+            // Assert
             Assert.AreEqual(TestErrorEnum.Nope2, ex.Code);
             Assert.AreEqual("Pas bon 2", ex.Message);
         }
@@ -89,10 +107,10 @@ namespace SbuTils.Common
         public void ThrowOnError_DoNotThrowOnOkResultWithoutObject()
         {
             // Arrange
-            //Act
+            // Act
             var result = GenerateOkResultNoObject().ThrowOnError<TestException>().ExtractObject();
 
-            //Assert
+            // Assert
 
             Assert.IsNull(result);
         }
@@ -101,10 +119,10 @@ namespace SbuTils.Common
         public void ThrowOnError_DoNotThrowOnOkResultWithObject()
         {
             // Arrange
-            //Act
+            // Act
             var result = GenerateOkResultWithObject().ThrowOnError<TestException>().ExtractObject();
 
-            //Assert
+            // Assert
 
             Assert.AreEqual("Bob", result?.Name);
         }
