@@ -4,3 +4,5 @@
 *.ncrunchsolution.user
 **/*.cache
 .idea/.idea.SbuTils/.idea
+SbuTils.sln.DotSettings.user
+out.mp4

@@ -13,6 +13,12 @@ public class RunReport
     public string[] ErrorsOutput { get; set; } = [];
 
     /// <summary>
+    /// Returns the last 10 lines of error output — useful for concise error messages in UI toasts.
+    /// The full report is available via <see cref="FancyReport"/>.
+    /// </summary>
+    public string ErrorSummary => string.Join("\n", ErrorsOutput.TakeLast(10));
+
+    /// <summary>
     /// Execute the provided action for each line in a fancy report. Can be used with your logger.
     /// </summary>
     /// <param name="action"></param>
